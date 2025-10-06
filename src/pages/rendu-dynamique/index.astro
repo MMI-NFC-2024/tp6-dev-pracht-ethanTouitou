@@ -1,0 +1,18 @@
+---
+import penguins from "../../assets/penguins.json";
+
+// Extraire la liste des espèces uniques
+const speciesList = [...new Set(penguins.map((p) => p.species))].sort();
+---
+
+<h1>Liste des espèces (rendu dynamique)</h1>
+
+<ul>
+    {
+        speciesList.map((s) => (
+            <li>
+                <a href={`/rendu-dynamique/${s}`}>{s}</a>
+            </li>
+        ))
+    }
+</ul>

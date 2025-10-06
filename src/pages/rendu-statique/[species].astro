@@ -1,0 +1,37 @@
+---
+import penguins from "../../assets/penguins.json";
+import * as Plot from "@observablehq/plot";
+import PlotFigure from "../../components/PlotFigure.astro";
+
+// Génération statique des pages selon les espèces
+export async function getStaticPaths() {
+    const speciesList = [...new Set(penguins.map((p) => p.species))];
+    return speciesList.map((s) => ({
+        params: { species: s },
+        props: { species: s },
+    }));
+}
+
+const { species } = Astro.props;
+const filtered = penguins.filter((p) => p.species === species);
+
+const plotOptions = {
+    grid: true,
+    marks: [
+        Plot.dot(filtered, {
+            x: "culmen_length_mm",
+            y: "body_mass_g",
+            fill: "tomato",
+            r: 5,
+        }),
+    ],
+    x: { label: "Longueur du bec (mm)" },
+    y: { label: "Masse corporelle (g)" },
+    title: `Relation taille / poids - ${species}`,
+};
+---
+
+<h1>Espèce : {species}</h1>
+<p>{filtered.length} pingouin(s) trouvé(s)</p>
+
+<PlotFigure options={plotOptions} />

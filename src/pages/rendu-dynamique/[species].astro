@@ -1,0 +1,33 @@
+---
+import penguins from "../../assets/penguins.json";
+import * as Plot from "@observablehq/plot";
+import PlotFigure from "../../components/PlotFigure.astro";
+
+export const prerender = false;
+
+const { species } = Astro.params;
+
+// Filtrer les pingouins selon l'espèce
+const filtered = penguins.filter((p) => p.species === species);
+
+// Configuration du graphique
+const plotOptions = {
+    grid: true,
+    marks: [
+        Plot.dot(filtered, {
+            x: "culmen_length_mm", // longueur du bec
+            y: "body_mass_g", // masse corporelle
+            fill: "steelblue",
+            r: 5,
+        }),
+    ],
+    x: { label: "Longueur du bec (mm)" },
+    y: { label: "Masse corporelle (g)" },
+    title: `Relation taille / poids - ${species}`,
+};
+---
+
+<h1>Espèce : {species}</h1>
+<p>{filtered.length} pingouin(s) trouvé(s)</p>
+
+<PlotFigure options={plotOptions} />
