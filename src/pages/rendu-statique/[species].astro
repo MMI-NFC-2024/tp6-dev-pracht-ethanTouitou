@@ -1,4 +1,5 @@
 ---
+import Layout from "../../layouts/Layout.astro";
 import penguins from "../../assets/penguins.json";
 import * as Plot from "@observablehq/plot";
 import PlotFigure from "../../components/PlotFigure.astro";
@@ -31,7 +32,55 @@ const plotOptions = {
 };
 ---
 
-<h1>Espèce : {species}</h1>
-<p>{filtered.length} pingouin(s) trouvé(s)</p>
+<Layout title={`Espèce : ${species}`}>
+    <section class="max-w-5xl mx-auto">
+        <!-- Titre -->
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-3">
+                Espèce : <span class="text-orange-600">{species}</span>
+            </h1>
+            <p class="text-gray-500 text-lg">
+                {filtered.length} pingouin(s) trouvé(s) dans le dataset
+            </p>
+        </header>
 
-<PlotFigure options={plotOptions} />
+        <!-- Graphique -->
+        <div
+            class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300"
+        >
+            <PlotFigure options={plotOptions} />
+        </div>
+
+        <!-- Explication -->
+        <div class="mt-10 bg-orange-50 border border-orange-100 rounded-xl p-6">
+            <h2 class="text-2xl font-semibold text-orange-700 mb-2">
+                Analyse du graphique
+            </h2>
+            <p class="text-gray-700 leading-relaxed">
+                Ce graphique, généré <strong
+                    >statistiquement lors du build</strong
+                >, représente la corrélation entre la <strong
+                    >longueur du bec</strong
+                > et la <strong>masse corporelle</strong>
+                des pingouins de l’espèce <span
+                    class="font-medium text-orange-600">{species}</span
+                >.
+            </p>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                Chaque point correspond à un individu. La génération statique
+                permet de pré-calculer les données et d’optimiser les
+                performances lors du chargement du site.
+            </p>
+        </div>
+
+        <!-- Bouton retour -->
+        <div class="mt-10 text-center">
+            <a
+                href="/rendu-statique"
+                class="inline-block bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 px-6 rounded-lg shadow-md transition-transform hover:-translate-y-0.5"
+            >
+                ← Retour à la liste des espèces
+            </a>
+        </div>
+    </section>
+</Layout>
